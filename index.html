@@ -1,1 +1,466 @@
-site original
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Aços e de Flores | Comunidade Feminina</title>
+    
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256', /* Roxo profundo e elegante */
+                            light: '#F8F4F9', /* Fundo roxo bem suave e acolhedor */
+                            silver: '#B0B5B9', /* Prata/Cinza metálico */
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #F8F4F9;
+            color: #333333;
+        }
+        
+        /* Efeito prata nos ícones */
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Botões Primários */
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3);
+        }
+        
+        /* Efeito de hover nos Cards */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            border-color: #5B3256;
+            box-shadow: 0 10px 30px rgba(91, 50, 86, 0.08);
+            transform: translateY(-5px);
+        }
+
+        /* Animação de entrada dos cards da grade */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F8F4F9; }
+        ::-webkit-scrollbar-thumb { background: #B0B5B9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5B3256; }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fa-solid fa-rose text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </div>
+
+                <!-- Navegação Desktop -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#comunidade" class="text-brand-text hover:text-brand-purple font-medium transition-colors">A Comunidade</a>
+                    <a href="#inspiracao" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Reflexões de Aço</a>
+                    <button class="text-brand-text font-medium hover:text-brand-purple transition-colors">Entrar</button>
+                </nav>
+
+                <!-- Botão CTA Desktop -->
+                <div class="hidden md:flex">
+                    <button class="bg-brand-purple text-white px-6 py-2.5 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                        Cadastre-se
+                    </button>
+                </div>
+
+                <!-- Menu Mobile (Hambúrguer) -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-purple text-2xl focus:outline-none p-2">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Mobile (Escondido por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-brand-silver/30 px-4 pt-2 pb-4 space-y-3 shadow-lg absolute w-full left-0">
+            <a href="#comunidade" class="block text-brand-text hover:text-brand-purple font-medium py-2">A Comunidade</a>
+            <a href="#inspiracao" class="block text-brand-text hover:text-brand-purple font-medium py-2">Reflexões de Aço</a>
+            <hr class="border-brand-silver/20">
+            <button class="block w-full text-left text-brand-text font-medium hover:text-brand-purple py-2">Entrar</button>
+            <button class="block w-full bg-brand-purple text-white px-4 py-3 rounded-full font-medium text-center shadow-md">Cadastre-se</button>
+        </div>
+    </header>
+
+    <section class="relative py-20 lg:py-28 overflow-hidden">
+        <!-- Elementos de fundo decorativo -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-purple opacity-5 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-silver opacity-10 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-brand-purple leading-tight mb-6">
+                A firmeza para enfrentar a vida,<br> a leveza para <span class="italic text-[#4a2846]">florescer.</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-brand-text/80 font-light leading-relaxed mb-10">
+                Um espaço seguro e acolhedor para mulheres que buscam apoio emocional, fortalecimento da autoestima e conexões genuínas.
+            </p>
+            
+            <!-- Barra de Busca -->
+            <div class="max-w-3xl mx-auto relative group mt-8">
+                <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-brand-silver text-xl group-focus-within:text-brand-purple transition-colors"></i>
+                </div>
+                <input type="text" id="searchInput" 
+                    class="block w-full pl-14 pr-6 py-5 rounded-full border border-white bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] focus:shadow-[0_8px_30px_rgba(91,50,86,0.12)] focus:border-brand-purple/30 text-brand-text transition-all text-lg placeholder:text-brand-silver focus:outline-none" 
+                    placeholder="Buscar participantes por local, sonho ou objetivo...">
+            </div>
+        </div>
+    </section>
+
+    <main id="comunidade" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-24 relative z-10">
+        <div class="flex flex-col md:flex-row items-center justify-between mb-10 border-b border-brand-silver/20 pb-4">
+            <h2 class="font-serif text-3xl font-semibold text-brand-purple">Conheça nossa rede</h2>
+            <span class="text-sm font-medium text-brand-text/60 flex items-center gap-2 mt-2 md:mt-0 bg-white px-4 py-1.5 rounded-full shadow-sm border border-brand-silver/10">
+                <i class="fa-solid fa-user-group text-brand-purple"></i> <span id="contador-participantes">0</span> mulheres conectadas
+            </span>
+        </div>
+
+        <!-- Container da Grade -->
+        <div id="grid-participantes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Os cards serão injetados via JS -->
+        </div>
+        
+        <!-- Estado Vazio da Busca -->
+        <div id="no-results" class="hidden text-center py-16 bg-white rounded-3xl border border-brand-silver/20 shadow-sm mt-4">
+            <i class="fa-solid fa-seedling text-5xl text-brand-silver/50 mb-4"></i>
+            <h3 class="text-2xl font-serif text-brand-purple mb-2">Nenhuma participante encontrada</h3>
+            <p class="text-brand-text/70">Tente buscar por outras palavras-chave ou abraçar novos horizontes.</p>
+        </div>
+    </main>
+
+    <section id="inspiracao" class="bg-white py-24 border-t border-brand-silver/20 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-3xl text-brand-purple mb-4">Reflexões de Aço</h2>
+                <div class="w-24 h-1 bg-brand-silver mx-auto rounded"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Quote do dia -->
+                <div class="bg-brand-light rounded-3xl p-10 border border-brand-silver/20 relative shadow-sm card-hover">
+                    <i class="fa-solid fa-quote-left text-5xl text-brand-silver opacity-30 absolute top-6 left-6"></i>
+                    <blockquote class="relative z-10">
+                        <p class="font-serif text-2xl lg:text-3xl text-brand-text italic leading-relaxed mb-6 pt-4 text-center">
+                            "Não se pode apagar a escuridão, mas podemos acender a luz."
+                        </p>
+                        <footer class="text-center mt-6">
+                            <cite class="font-bold font-sans text-brand-purple not-italic text-lg uppercase tracking-wider">— Clarice Lispector</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+
+                <!-- Video / Mídia -->
+                <div class="rounded-3xl overflow-hidden shadow-[0_10px_40px_rgba(91,50,86,0.15)] group relative cursor-pointer aspect-video flex items-center justify-center bg-[#2a1728]">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Mulheres unidas" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-30 transition-opacity duration-500 mix-blend-overlay">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-purple/80 to-transparent opacity-80"></div>
+                    
+                    <div class="relative z-10 flex flex-col items-center text-center px-4">
+                        <div class="w-20 h-20 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full flex items-center justify-center shadow-lg mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-play text-2xl ml-1"></i>
+                        </div>
+                        <h3 class="text-white font-serif text-2xl md:text-3xl font-medium drop-shadow-md">O poder da vulnerabilidade</h3>
+                        <p class="text-brand-light/90 mt-2 text-lg font-light tracking-wide">Por Brené Brown</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-brand-purple relative overflow-hidden">
+        <!-- Pattern de fundo -->
+        <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <i class="fa-solid fa-spa text-4xl text-brand-silver opacity-50 mb-6 silver-gradient"></i>
+            <h2 class="font-serif text-3xl md:text-4xl text-white mb-6 leading-tight">
+                De Aços e de Flores é um espaço de acolhimento para nutrir a resiliência e o amor-próprio.
+            </h2>
+            <p class="text-brand-light/80 text-lg mb-10 font-light">
+                Construa relações baseadas em respeito, empatia e crescimento coletivo. Junte-se a nós.
+            </p>
+            <button class="inline-block bg-white text-brand-purple text-xl px-10 py-4 rounded-full font-semibold shadow-lg hover:bg-brand-light hover:scale-105 transition-all duration-300">
+                Quero Participar
+            </button>
+        </div>
+    </section>
+
+    <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-16 h-16 bg-brand-purple text-white rounded-full shadow-[0_8px_20px_rgba(91,50,86,0.4)] flex items-center justify-center hover:bg-[#4a2846] hover:scale-110 transition-all z-50 focus:outline-none border-2 border-white/20">
+        <i class="fa-solid fa-comment-dots text-3xl"></i>
+    </button>
+
+    <div id="chat-window" class="fixed bottom-28 right-6 w-80 bg-white rounded-3xl shadow-2xl border border-brand-silver/30 flex flex-col hidden z-50 transform transition-all origin-bottom-right overflow-hidden">
+        <div class="bg-brand-purple text-white p-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-rose silver-gradient text-xl"></i>
+                <span class="font-serif font-medium tracking-wide">Apoio Aços & Flores</span>
+            </div>
+            <button onclick="toggleChat()" class="text-brand-light/70 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <div class="p-5 flex-grow bg-brand-light/50 h-72 overflow-y-auto space-y-4">
+            <div class="bg-white border border-brand-silver/20 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-brand-text/90 leading-relaxed">
+                Olá! Lembre-se: pedir ajuda é um ato de coragem, não de fraqueza. Como você está se sentindo hoje? 💜
+            </div>
+        </div>
+        <div class="p-4 border-t border-brand-silver/20 bg-white flex gap-2 items-center">
+            <input type="text" placeholder="Digite sua mensagem..." class="flex-grow bg-brand-light border border-brand-silver/30 rounded-full px-4 py-3 text-sm focus:outline-none focus:border-brand-purple/50 focus:ring-1 focus:ring-brand-purple/50 transition-all">
+            <button class="bg-brand-purple text-white rounded-full w-12 h-12 flex items-center justify-center hover:bg-[#4a2846] shadow-md transition-colors">
+                <i class="fa-solid fa-paper-plane text-sm -ml-0.5 mt-0.5"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-brand-silver/30 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-6 md:mb-0">
+                <i class="fa-solid fa-rose text-2xl silver-gradient"></i>
+                <span class="font-serif font-bold text-brand-purple text-xl">De Aços e de Flores</span>
+            </div>
+            
+            <div class="flex space-x-6">
+                <a href="#" class="w-10 h-10 rounded-full bg-brand-light flex items-center justify-center text-brand-silver hover:bg-brand-purple hover:text-white transition-all duration-300 shadow-sm"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-brand-light flex items-center justify-center text-brand-silver hover:bg-brand-purple hover:text-white transition-all duration-300 shadow-sm"><i class="fa-brands fa-tiktok text-lg"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-brand-light flex items-center justify-center text-brand-silver hover:bg-brand-purple hover:text-white transition-all duration-300 shadow-sm"><i class="fa-brands fa-whatsapp text-lg"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-10 text-brand-text/50 text-sm font-light">
+            &copy; 2026 De Aços e de Flores. Todos os direitos reservados.<br>
+            Um espaço feito por mulheres, para mulheres.
+        </div>
+    </footer>
+
+    <script>
+        // COLE A SUA URL DO WEB APP AQUI DENTRO DAS ASPAS
+        const API_URL = "SUA_URL_DO_APP_SCRIPT_AQUI"; 
+        
+        // Variáveis globais para armazenar os dados carregados
+        let participantesData = [];
+        let conteudosData = [];
+
+        // Função para gerar o HTML de um Card com o novo layout
+        function createCard(participante, delay) {
+            return `
+                <div class="bg-white rounded-3xl p-8 border border-brand-silver/20 shadow-[0_4px_20px_rgba(0,0,0,0.03)] card-hover animate-fade-in relative overflow-hidden" style="animation-delay: ${delay}ms">
+                    <!-- Detalhe decorativo no topo do card -->
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-silver/40 via-brand-purple/50 to-brand-silver/40"></div>
+                    
+                    <!-- Cabeçalho do Card -->
+                    <div class="mb-5 mt-2">
+                        <h3 class="text-2xl font-bold font-serif text-brand-purple mb-2">${participante.nome}</h3>
+                        <div class="flex flex-col gap-1.5 text-sm text-brand-text/70">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-brand-silver/70 w-4 text-center"></i> ${participante.localidade}
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-user text-brand-silver/70 w-4 text-center"></i> ${participante.faixa_etaria}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Etiqueta de Gênero -->
+                    <span class="inline-block bg-brand-light text-brand-purple text-xs px-4 py-1.5 rounded-full font-medium mb-6 border border-brand-purple/10">
+                        ${participante.genero}
+                    </span>
+                    
+                    <div class="space-y-5">
+                        <!-- O que busco -->
+                        <div>
+                            <p class="text-[11px] font-bold text-brand-silver uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-magnifying-glass text-[10px]"></i> O que busco aqui
+                            </p>
+                            <!-- Adicionado fallback caso a planilha venha vazia nesse campo -->
+                            <p class="text-sm text-brand-text/90 border-l-2 border-brand-purple/30 pl-3 italic py-1 bg-gradient-to-r from-brand-light to-transparent">
+                                "${participante.objetivo_site || 'Apoio e acolhimento.'}"
+                            </p>
+                        </div>
+                        
+                        <!-- Meus sonhos -->
+                        <div>
+                            <p class="text-[11px] font-bold text-brand-silver uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-star text-[10px]"></i> Meus sonhos
+                            </p>
+                            <p class="text-sm text-brand-text/80 bg-brand-light p-4 rounded-2xl border border-brand-silver/10 leading-relaxed">
+                                ${participante.sonhos_objetivos_vida || 'Descobrir novas possibilidades.'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Função para renderizar a grade
+        function renderCards(dados) {
+            const container = document.getElementById('grid-participantes');
+            const counter = document.getElementById('contador-participantes');
+            const noResults = document.getElementById('no-results');
+            
+            container.innerHTML = '';
+            counter.innerText = dados.length;
+
+            if (dados.length === 0) {
+                noResults.classList.remove('hidden');
+                // Se a lista estiver vazia por falta de carregamento, ajusta a mensagem
+                if (participantesData.length === 0) {
+                    noResults.querySelector('h3').innerText = "Carregando a rede...";
+                    noResults.querySelector('p').innerText = "Estamos buscando as mulheres conectadas no nosso espaço.";
+                } else {
+                    noResults.querySelector('h3').innerText = "Nenhuma participante encontrada";
+                    noResults.querySelector('p').innerText = "Tente buscar por outras palavras-chave ou abraçar novos horizontes.";
+                }
+            } else {
+                noResults.classList.add('hidden');
+                dados.forEach((p, index) => {
+                    container.innerHTML += createCard(p, index * 100);
+                });
+            }
+        }
+
+        async function fetchBancoDeDados() {
+            // Renderiza um estado inicial de carregamento
+            renderCards([]); 
+
+            try {
+                // Adiciona action=getAll na URL para chamar as duas planilhas de uma vez
+                const response = await fetch(`${API_URL}?action=getAll`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    participantesData = data.participantes;
+                    conteudosData = data.conteudos;
+                    
+                    // Renderiza os cards agora com os dados reais
+                    renderCards(participantesData);
+                    
+                    // Futuro: Aqui você pode usar conteudosData para injetar no DOM
+                    // a citação do dia, mensagens do chatbot, etc.
+                    console.log("Conteúdos carregados:", conteudosData);
+                } else {
+                    console.error("Erro do Backend:", data.message);
+                }
+            } catch (error) {
+                console.error("Erro de conexão:", error);
+                document.getElementById('no-results').innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation text-5xl text-red-300 mb-4"></i>
+                    <h3 class="text-2xl font-serif text-brand-purple mb-2">Erro de conexão</h3>
+                    <p class="text-brand-text/70">Não foi possível carregar os dados. Verifique a URL do backend e sua internet.</p>
+                `;
+            }
+        }
+
+        // Sistema de Busca Integrado
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const termo = e.target.value.toLowerCase();
+            const resultados = participantesData.filter(p => 
+                (p.nome && p.nome.toLowerCase().includes(termo)) ||
+                (p.localidade && p.localidade.toLowerCase().includes(termo)) ||
+                (p.sonhos_objetivos_vida && p.sonhos_objetivos_vida.toLowerCase().includes(termo)) ||
+                (p.objetivo_site && p.objetivo_site.toLowerCase().includes(termo))
+            );
+            renderCards(resultados);
+        });
+
+        // Menu Mobile Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        });
+
+        // Chat Toggle Animation
+        function toggleChat() {
+            const chat = document.getElementById('chat-window');
+            if (chat.classList.contains('hidden')) {
+                chat.classList.remove('hidden');
+                void chat.offsetWidth; // Trigger reflow
+                chat.classList.add('opacity-100', 'scale-100');
+                chat.classList.remove('opacity-0', 'scale-95');
+            } else {
+                chat.classList.remove('opacity-100', 'scale-100');
+                chat.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    chat.classList.add('hidden');
+                }, 300); // Wait for transition
+            }
+        }
+
+        // Navbar Styling on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/95');
+                nav.classList.remove('bg-white/90');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/95');
+                nav.classList.add('bg-white/90');
+            }
+        });
+
+        // Inicializar aplicação conectando com a planilha
+        window.onload = () => {
+            if (API_URL === "SUA_URL_DO_APP_SCRIPT_AQUI") {
+                 document.getElementById('no-results').classList.remove('hidden');
+                 document.getElementById('no-results').innerHTML = `
+                    <i class="fa-solid fa-link text-5xl text-brand-silver/50 mb-4"></i>
+                    <h3 class="text-2xl font-serif text-brand-purple mb-2">Atenção ao Backend</h3>
+                    <p class="text-brand-text/70">Você precisa colar a URL do Apps Script na variável API_URL no código do site.</p>
+                `;
+            } else {
+                fetchBancoDeDados();
+            }
+        };
+    </script>
+</body>
+</html>
