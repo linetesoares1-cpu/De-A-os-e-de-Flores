@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar | De Aços e de Flores</title>
+
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256',
+                            light: '#F8F4F9',
+                            silver: '#B0B5B9',
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F8F4F9; color: #333333; }
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .campo {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border: 1px solid rgba(176, 181, 185, 0.5);
+            border-radius: 0.75rem;
+            background-color: #ffffff;
+            font-weight: 300;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .campo:focus {
+            border-color: #5B3256;
+            box-shadow: 0 0 0 3px rgba(91, 50, 86, 0.1);
+        }
+        .btn-primary { transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3); }
+        .aba-ativa { background-color: #5B3256; color: #ffffff; }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Cabeçalho -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <i class="fa-solid fa-spa text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </a>
+                <span class="hidden sm:inline-flex items-center gap-2 text-brand-purple font-medium">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Área de Gerenciamento
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow py-10 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
+
+            <!-- ETAPA 1: Chave de acesso -->
+            <section id="telaChave" class="max-w-md mx-auto mt-10">
+                <div class="bg-white p-8 rounded-2xl border border-brand-silver/20 shadow-sm text-center">
+                    <i class="fa-solid fa-key text-3xl text-brand-purple mb-4"></i>
+                    <h1 class="font-serif text-2xl text-brand-purple mb-2">Acesso restrito</h1>
+                    <p class="text-brand-text/70 font-light mb-6">Digite a chave de acesso da equipe para gerenciar os conteúdos do site.</p>
+                    <input type="password" id="chaveInput" class="campo mb-4 text-center" placeholder="Chave de acesso">
+                    <button id="btnEntrar" class="w-full bg-brand-purple text-white px-6 py-3 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                        Entrar
+                    </button>
+                    <p id="erroChave" class="hidden mt-4 text-red-600 text-sm font-medium"></p>
+                </div>
+            </section>
+
+            <!-- ETAPA 2: Painel -->
+            <section id="painel" class="hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                    <h1 class="font-serif text-2xl md:text-3xl text-brand-purple">Gerenciar o site</h1>
+                    <div class="flex gap-2">
+                        <button data-aba="conteudos" class="botaoAba aba-ativa px-5 py-2 rounded-full font-medium border border-brand-purple text-sm transition-colors">
+                            <i class="fa-solid fa-leaf mr-1"></i> Conteúdos
+                        </button>
+                        <button data-aba="participantes" class="botaoAba px-5 py-2 rounded-full font-medium border border-brand-purple text-brand-purple text-sm transition-colors">
+                            <i class="fa-solid fa-users mr-1"></i> Participantes
+                        </button>
+                        <button id="btnSair" class="px-5 py-2 rounded-full font-medium border border-brand-silver/50 text-brand-text/60 hover:text-brand-purple text-sm transition-colors">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
+                        </button>
+                    </div>
+                </div>
+
+                <div id="avisoGeral" class="hidden mb-6 p-4 rounded-xl text-center font-medium"></div>
+
+                <!-- ABA CONTEÚDOS -->
+                <div id="abaConteudos">
+                    <!-- Formulário novo/editar -->
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-brand-silver/20 shadow-sm mb-8">
+                        <h2 id="tituloFormConteudo" class="font-serif text-xl text-brand-purple mb-6">
+                            <i class="fa-solid fa-circle-plus mr-1"></i> Novo conteúdo
+                        </h2>
+                        <form id="formConteudo" class="space-y-5">
+                            <input type="hidden" id="conteudoId" value="">
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="tipo_conteudo" class="block font-medium mb-2 text-brand-purple">Tipo <span class="text-red-400">*</span></label>
+                                    <select id="tipo_conteudo" required class="campo">
+                                        <option value="">Selecione...</option>
+                                        <option>Frase</option>
+                                        <option>Video</option>
+                                        <option>Resposta Chatbot</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="autor" class="block font-medium mb-2 text-brand-purple">Autoria</label>
+                                    <input type="text" id="autor" class="campo" placeholder="Ex.: Clarice Lispector, Equipe...">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="texto_conteudo" class="block font-medium mb-2 text-brand-purple">Texto / mensagem <span class="text-red-400">*</span></label>
+                                <textarea id="texto_conteudo" rows="3" required class="campo resize-none"
+                                    placeholder="A frase, a descrição do vídeo ou a mensagem do chatbot"></textarea>
+                            </div>
+                            <div>
+                                <label for="video_url" class="block font-medium mb-2 text-brand-purple">Link do vídeo (só para tipo Video)</label>
+                                <input type="url" id="video_url" class="campo" placeholder="https://youtube.com/...">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button type="submit" id="btnSalvarConteudo"
+                                    class="bg-brand-purple text-white px-8 py-3 rounded-full font-medium btn-primary hover:bg-[#4a2846] disabled:opacity-60">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> <span id="btnSalvarTexto">Salvar conteúdo</span>
+                                </button>
+                                <button type="button" id="btnCancelarEdicao"
+                                    class="hidden bg-white text-brand-purple border border-brand-silver/50 px-8 py-3 rounded-full font-medium hover:bg-gray-50">
+                                    Cancelar edição
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Lista -->
+                    <div class="bg-white rounded-2xl border border-brand-silver/20 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-brand-silver/20 flex items-center justify-between">
+                            <h2 class="font-serif text-xl text-brand-purple">Conteúdos cadastrados</h2>
+                            <button id="btnRecarregarConteudos" class="text-brand-purple hover:underline text-sm font-medium">
+                                <i class="fa-solid fa-rotate mr-1"></i> Recarregar
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-brand-light text-brand-purple text-left">
+                                        <th class="px-4 py-3 font-semibold">Tipo</th>
+                                        <th class="px-4 py-3 font-semibold">Texto</th>
+                                        <th class="px-4 py-3 font-semibold">Autoria</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Situação</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaConteudos">
+                                    <tr><td colspan="5" class="px-4 py-8 text-center text-brand-silver">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA PARTICIPANTES -->
+                <div id="abaParticipantes" class="hidden">
+                    <div class="bg-white rounded-2xl border border-brand-silver/20 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-brand-silver/20 flex items-center justify-between">
+                            <h2 class="font-serif text-xl text-brand-purple">Participantes</h2>
+                            <button id="btnRecarregarParticipantes" class="text-brand-purple hover:underline text-sm font-medium">
+                                <i class="fa-solid fa-rotate mr-1"></i> Recarregar
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-brand-light text-brand-purple text-left">
+                                        <th class="px-4 py-3 font-semibold">Nome</th>
+                                        <th class="px-4 py-3 font-semibold">Contato</th>
+                                        <th class="px-4 py-3 font-semibold">Localidade</th>
+                                        <th class="px-4 py-3 font-semibold">Cadastro</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Situação</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaParticipantes">
+                                    <tr><td colspan="6" class="px-4 py-8 text-center text-brand-silver">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-brand-silver/30 pt-10 pb-8 mt-auto">
+        <div class="text-center text-brand-silver text-sm font-light">
+            &copy; 2024 De Aços e de Flores — Área de gerenciamento da equipe.
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQlnxXvxmHiHxC2Qwc4ATG0W1cli3y-pBBMTiyJ9JNVNUiM5gNHm1w43PccGzKCzYo/exec';
+        let chave = sessionStorage.getItem('chaveAdmin') || '';
+
+        const $ = id => document.getElementById(id);
+
+        let avisoTimer = null;
+        function aviso(texto, sucesso) {
+            const el = $('avisoGeral');
+            el.textContent = texto;
+            el.className = 'mb-6 p-4 rounded-xl text-center font-medium ' +
+                (sucesso ? 'bg-green-50 text-green-700 border border-green-200'
+                         : 'bg-red-50 text-red-700 border border-red-200');
+            if (avisoTimer) clearTimeout(avisoTimer);
+            avisoTimer = setTimeout(() => { el.className = 'hidden'; }, 5000);
+        }
+
+        async function chamarApi(action, payload) {
+            const resposta = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: action, chave: chave, payload: payload || {} })
+            });
+            return resposta.json();
+        }
+
+        // ---------- Entrada com chave ----------
+        let entrando = false;
+        async function entrar() {
+            if (entrando) return;
+            chave = $('chaveInput').value.trim();
+            if (!chave) return;
+            entrando = true;
+            $('btnEntrar').disabled = true;
+            $('btnEntrar').textContent = 'Verificando...';
+            try {
+                const r = await chamarApi('adminListarConteudos');
+                if (r.status === 'success') {
+                    sessionStorage.setItem('chaveAdmin', chave);
+                    $('telaChave').classList.add('hidden');
+                    $('painel').classList.remove('hidden');
+                    renderizarConteudos(r.data);
+                    carregarParticipantes();
+                } else {
+                    sessionStorage.removeItem('chaveAdmin');
+                    $('erroChave').textContent = r.message || 'Chave inválida.';
+                    $('erroChave').classList.remove('hidden');
+                }
+            } catch (e) {
+                $('erroChave').textContent = 'Não foi possível conectar. Tente novamente.';
+                $('erroChave').classList.remove('hidden');
+            }
+            entrando = false;
+            $('btnEntrar').disabled = false;
+            $('btnEntrar').textContent = 'Entrar';
+        }
+
+        $('btnEntrar').addEventListener('click', entrar);
+        $('chaveInput').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+
+        // ---------- Abas ----------
+        document.querySelectorAll('.botaoAba').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.botaoAba').forEach(b => {
+                    b.classList.remove('aba-ativa');
+                    b.classList.add('text-brand-purple');
+                });
+                btn.classList.add('aba-ativa');
+                btn.classList.remove('text-brand-purple');
+                $('abaConteudos').classList.toggle('hidden', btn.dataset.aba !== 'conteudos');
+                $('abaParticipantes').classList.toggle('hidden', btn.dataset.aba !== 'participantes');
+            });
+        });
+
+        // ---------- Conteúdos ----------
+        function escapar(t) {
+            const div = document.createElement('div');
+            div.textContent = t == null ? '' : String(t);
+            return div.innerHTML;
+        }
+
+        function renderizarConteudos(lista) {
+            const corpo = $('listaConteudos');
+            if (!lista || !lista.length) {
+                corpo.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-brand-silver">Nenhum conteúdo ainda.</td></tr>';
+                return;
+            }
+            corpo.innerHTML = lista.map(c => `
+                <tr class="border-t border-brand-silver/10 ${c.ativo ? '' : 'opacity-50'}">
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(c.tipo_conteudo)}</td>
+                    <td class="px-4 py-3 max-w-md">${escapar(c.texto_conteudo)}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(c.autor)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${c.ativo ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">
+                            ${c.ativo ? 'No ar' : 'Oculto'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                        <button class="btnEditar text-brand-purple hover:underline font-medium mr-3" data-id="${c.id}">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </button>
+                        <button class="btnAlternar ${c.ativo ? 'text-gray-500' : 'text-green-600'} hover:underline font-medium" data-id="${c.id}" data-ativo="${c.ativo}">
+                            <i class="fa-solid ${c.ativo ? 'fa-eye-slash' : 'fa-eye'}"></i> ${c.ativo ? 'Ocultar' : 'Publicar'}
+                        </button>
+                    </td>
+                </tr>`).join('');
+
+            corpo.dataset.cache = JSON.stringify(lista);
+
+            corpo.querySelectorAll('.btnEditar').forEach(b => b.addEventListener('click', () => editarConteudo(Number(b.dataset.id))));
+            corpo.querySelectorAll('.btnAlternar').forEach(b => b.addEventListener('click', async () => {
+                if (b.disabled) return;
+                b.disabled = true;
+                const novoAtivo = b.dataset.ativo !== 'true';
+                try {
+                    const r = await chamarApi('adminAlternarAtivo', { aba: 'Conteúdos', id: Number(b.dataset.id), ativo: novoAtivo });
+                    aviso(r.message || 'Feito.', r.status === 'success');
+                    carregarConteudos();
+                } catch (e) {
+                    aviso('Falha de conexão. Tente novamente.', false);
+                    b.disabled = false;
+                }
+            }));
+        }
+
+        async function carregarConteudos() {
+            const r = await chamarApi('adminListarConteudos');
+            if (r.status === 'success') renderizarConteudos(r.data);
+            else aviso(r.message || 'Erro ao carregar conteúdos.', false);
+        }
+
+        function editarConteudo(id) {
+            const lista = JSON.parse($('listaConteudos').dataset.cache || '[]');
+            const c = lista.find(x => Number(x.id) === id);
+            if (!c) return;
+            $('conteudoId').value = c.id;
+            $('tipo_conteudo').value = c.tipo_conteudo || '';
+            $('texto_conteudo').value = c.texto_conteudo || '';
+            $('autor').value = c.autor || '';
+            $('video_url').value = c.video_url || '';
+            $('tituloFormConteudo').innerHTML = '<i class="fa-solid fa-pen mr-1"></i> Editando conteúdo #' + c.id;
+            $('btnCancelarEdicao').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function limparFormConteudo() {
+            $('conteudoId').value = '';
+            $('formConteudo').reset();
+            $('tituloFormConteudo').innerHTML = '<i class="fa-solid fa-circle-plus mr-1"></i> Novo conteúdo';
+            $('btnCancelarEdicao').classList.add('hidden');
+        }
+
+        $('btnCancelarEdicao').addEventListener('click', limparFormConteudo);
+        $('btnRecarregarConteudos').addEventListener('click', carregarConteudos);
+
+        $('formConteudo').addEventListener('submit', async e => {
+            e.preventDefault();
+            $('btnSalvarConteudo').disabled = true;
+            $('btnSalvarTexto').textContent = 'Salvando...';
+            const payload = {
+                tipo_conteudo: $('tipo_conteudo').value,
+                texto_conteudo: $('texto_conteudo').value.trim(),
+                autor: $('autor').value.trim(),
+                video_url: $('video_url').value.trim()
+            };
+            const id = $('conteudoId').value;
+            if (id) payload.id = Number(id);
+            try {
+                const r = await chamarApi('adminSalvarConteudo', payload);
+                aviso(r.message || 'Feito.', r.status === 'success');
+                if (r.status === 'success') { limparFormConteudo(); carregarConteudos(); }
+            } catch (err) {
+                aviso('Não foi possível salvar agora. Tente novamente.', false);
+            }
+            $('btnSalvarConteudo').disabled = false;
+            $('btnSalvarTexto').textContent = 'Salvar conteúdo';
+        });
+
+        // ---------- Participantes ----------
+        function renderizarParticipantes(lista) {
+            const corpo = $('listaParticipantes');
+            if (!lista || !lista.length) {
+                corpo.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-brand-silver">Nenhuma participante ainda.</td></tr>';
+                return;
+            }
+            corpo.innerHTML = lista.map(p => `
+                <tr class="border-t border-brand-silver/10 ${p.ativo ? '' : 'opacity-50'}">
+                    <td class="px-4 py-3">${escapar(p.nome)}</td>
+                    <td class="px-4 py-3">${escapar(p.login_contato)}</td>
+                    <td class="px-4 py-3">${escapar(p.localidade)}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(p.data_cadastro)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${p.ativo ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">
+                            ${p.ativo ? 'Ativa' : 'Inativa'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                        <button class="btnAlternarP ${p.ativo ? 'text-gray-500' : 'text-green-600'} hover:underline font-medium" data-id="${p.id}" data-ativo="${p.ativo}">
+                            <i class="fa-solid ${p.ativo ? 'fa-user-slash' : 'fa-user-check'}"></i> ${p.ativo ? 'Desativar' : 'Reativar'}
+                        </button>
+                    </td>
+                </tr>`).join('');
+
+            corpo.querySelectorAll('.btnAlternarP').forEach(b => b.addEventListener('click', async () => {
+                if (b.disabled) return;
+                b.disabled = true;
+                const novoAtivo = b.dataset.ativo !== 'true';
+                try {
+                    const r = await chamarApi('adminAlternarAtivo', { aba: 'Participantes', id: Number(b.dataset.id), ativo: novoAtivo });
+                    aviso(r.message || 'Feito.', r.status === 'success');
+                    carregarParticipantes();
+                } catch (e) {
+                    aviso('Falha de conexão. Tente novamente.', false);
+                    b.disabled = false;
+                }
+            }));
+        }
+
+        async function carregarParticipantes() {
+            const r = await chamarApi('adminListarParticipantes');
+            if (r.status === 'success') renderizarParticipantes(r.data);
+            else aviso(r.message || 'Erro ao carregar participantes.', false);
+        }
+
+        $('btnRecarregarParticipantes').addEventListener('click', carregarParticipantes);
+
+        // ---------- Sair ----------
+        $('btnSair').addEventListener('click', () => {
+            sessionStorage.removeItem('chaveAdmin');
+            location.reload();
+        });
+
+        // Se já tem chave salva na sessão, tenta entrar direto
+        if (chave) {
+            $('chaveInput').value = chave;
+            entrar();
+        }
+    </script>
+
+</body>
+</html>
