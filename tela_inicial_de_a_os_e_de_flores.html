@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Aços e de Flores | Comunidade Feminina</title>
+    
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256', /* Roxo profundo e elegante */
+                            light: '#F8F4F9', /* Fundo roxo bem suave e acolhedor */
+                            silver: '#B0B5B9', /* Prata/Cinza metálico */
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F4F9;
+            color: #333333;
+        }
+        /* Efeito prata nos ícones */
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3);
+        }
+        .card-hover:hover {
+            border-color: #5B3256;
+            box-shadow: 0 10px 30px rgba(91, 50, 86, 0.05);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Cabeçalho (Navbar) -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <!-- Ícone de Rosa (Placeholder) -->
+                    <i class="fa-solid fa-rose text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </div>
+
+                <!-- Navegação Desktop -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Início</a>
+                    <a href="#comunidade" class="text-brand-text hover:text-brand-purple font-medium transition-colors">A Comunidade</a>
+                    <a href="#circulos" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Círculos de Conversa</a>
+                    <a href="#reflexoes" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Reflexões de Aço</a>
+                </nav>
+
+                <!-- Botão CTA Desktop -->
+                <div class="hidden md:flex">
+                    <a href="#entrar" class="bg-brand-purple text-white px-6 py-2.5 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                        Entrar na Comunidade
+                    </a>
+                </div>
+
+                <!-- Menu Mobile (Hambúrguer) -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-brand-purple text-2xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção Hero (Boas-vindas) -->
+    <section class="relative py-20 lg:py-32 overflow-hidden">
+        <!-- Elemento de fundo decorativo -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-purple opacity-5 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-silver opacity-10 blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-brand-purple leading-tight mb-6">
+                A firmeza para enfrentar a vida,<br> a leveza para florescer.
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-brand-text/80 font-light leading-relaxed mb-10">
+                Um espaço seguro e acolhedor para mulheres que buscam apoio emocional, fortalecimento da autoestima e conexões genuínas, sem julgamentos. Você não está sozinha.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#entrar" class="bg-brand-purple text-white text-lg px-8 py-4 rounded-full font-medium btn-primary hover:bg-[#4a2846] flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-heart text-sm"></i> Fazer parte da Comunidade
+                </a>
+                <a href="#sobre" class="bg-white text-brand-purple border border-brand-silver/50 text-lg px-8 py-4 rounded-full font-medium hover:bg-gray-50 transition-colors">
+                    Conhecer o projeto
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Nossos Pilares (Estrutura do Site) -->
+    <section id="sobre" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-3xl text-brand-purple mb-4">O que você encontra aqui?</h2>
+                <div class="w-24 h-1 bg-brand-silver mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Card Comunidade -->
+                <div class="bg-brand-light p-8 rounded-2xl border border-brand-silver/20 card-hover text-center" id="comunidade">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                        <i class="fa-solid fa-users text-2xl text-brand-purple"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold mb-3 text-brand-purple">A Comunidade</h3>
+                    <p class="text-brand-text/80 font-light leading-relaxed mb-6">
+                        O coração do nosso projeto. Um ambiente seguro para interagir, desabafar, celebrar conquistas e apoiar outras mulheres em suas jornadas.
+                    </p>
+                    <a href="#" class="text-brand-purple font-medium hover:underline text-sm uppercase tracking-wider">Acessar Mural <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <!-- Card Círculos de Conversa -->
+                <div class="bg-brand-light p-8 rounded-2xl border border-brand-silver/20 card-hover text-center" id="circulos">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                        <i class="fa-regular fa-comments text-2xl text-brand-purple"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold mb-3 text-brand-purple">Círculos de Conversa</h3>
+                    <p class="text-brand-text/80 font-light leading-relaxed mb-6">
+                        Salas temáticas dedicadas. Converse sobre autoestima, maternidade, recomeços e superações com quem entende exatamente o que você sente.
+                    </p>
+                    <a href="#" class="text-brand-purple font-medium hover:underline text-sm uppercase tracking-wider">Ver Temas <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <!-- Card Reflexões -->
+                <div class="bg-brand-light p-8 rounded-2xl border border-brand-silver/20 card-hover text-center" id="reflexoes">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                        <i class="fa-solid fa-leaf text-2xl text-brand-purple"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold mb-3 text-brand-purple">Reflexões de Aço</h3>
+                    <p class="text-brand-text/80 font-light leading-relaxed mb-6">
+                        Textos inspiradores e pílulas de força para nutrir sua coragem, estabelecer limites saudáveis e reconstruir seu amor-próprio dia após dia.
+                    </p>
+                    <a href="#" class="text-brand-purple font-medium hover:underline text-sm uppercase tracking-wider">Ler Reflexões <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Chamada Final (Foco na Ação Principal) -->
+    <section class="py-24 bg-brand-purple relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <i class="fa-solid fa-quote-left text-4xl text-brand-silver opacity-50 mb-6"></i>
+            <h2 class="font-serif text-3xl md:text-4xl text-white mb-6">
+                De Aços e de Flores é um espaço de acolhimento para mulheres, com conteúdos e interação que fortalecem a resiliência, o amor-próprio, a paz interior e o apoio mútuo.
+            </h2>
+            <p class="text-brand-light/80 text-lg mb-10 font-light">
+                Junte-se a nós. Construa relações baseadas em respeito, empatia e crescimento coletivo.
+            </p>
+            <a href="#entrar" class="inline-block bg-white text-brand-purple text-xl px-10 py-5 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300">
+                Quero Entrar na Comunidade
+            </a>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-brand-silver/30 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-rose text-xl silver-gradient"></i>
+                <span class="font-serif font-bold text-brand-purple">De Aços e de Flores</span>
+            </div>
+            
+            <div class="flex space-x-6">
+                <!-- Redes Sociais (Prata/Cinza com hover Roxo) -->
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-brand-silver text-sm font-light">
+            &copy; 2024 De Aços e de Flores. Todos os direitos reservados.<br>
+            Um espaço feito por mulheres, para mulheres.
+        </div>
+    </footer>
+
+</body>
+</html>
