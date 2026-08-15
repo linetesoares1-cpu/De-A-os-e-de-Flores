@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | De Aços e de Flores</title>
+
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256', /* Roxo profundo e elegante */
+                            light: '#F8F4F9', /* Fundo roxo bem suave e acolhedor */
+                            silver: '#B0B5B9', /* Prata/Cinza metálico */
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F4F9;
+            color: #333333;
+        }
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3);
+        }
+        .campo {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(176, 181, 185, 0.5);
+            border-radius: 0.75rem;
+            background-color: #ffffff;
+            font-weight: 300;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .campo:focus {
+            border-color: #5B3256;
+            box-shadow: 0 0 0 3px rgba(91, 50, 86, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Cabeçalho (Navbar) -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3">
+                    <i class="fa-solid fa-spa text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </a>
+
+                <!-- Voltar -->
+                <a href="index.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Voltar ao início
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Formulário de Cadastro -->
+    <main class="flex-grow py-12 lg:py-16 relative overflow-hidden">
+        <!-- Elementos de fundo decorativos -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-purple opacity-5 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-silver opacity-10 blur-3xl"></div>
+
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 relative z-10">
+            <div class="text-center mb-10">
+                <h1 class="font-serif text-3xl md:text-4xl text-brand-purple mb-4">Faça parte da Comunidade</h1>
+                <p class="text-brand-text/80 font-light text-lg leading-relaxed">
+                    Que alegria ter você aqui! Preencha com carinho — este é o primeiro passo da sua jornada conosco. 🌷
+                </p>
+                <div class="w-24 h-1 bg-brand-silver mx-auto rounded mt-6"></div>
+            </div>
+
+            <form id="formCadastro" class="bg-white p-8 md:p-10 rounded-2xl border border-brand-silver/20 shadow-sm space-y-6">
+
+                <div>
+                    <label for="nome" class="block font-medium mb-2 text-brand-purple">Seu nome <span class="text-red-400">*</span></label>
+                    <input type="text" id="nome" name="nome" required placeholder="Como você gosta de ser chamada"
+                        class="campo">
+                </div>
+
+                <div>
+                    <label for="login_contato" class="block font-medium mb-2 text-brand-purple">E-mail ou WhatsApp <span class="text-red-400">*</span></label>
+                    <input type="text" id="login_contato" name="login_contato" required placeholder="Para mantermos contato com você"
+                        class="campo">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="faixa_etaria" class="block font-medium mb-2 text-brand-purple">Faixa etária</label>
+                        <select id="faixa_etaria" name="faixa_etaria" class="campo">
+                            <option value="">Selecione...</option>
+                            <option>18 a 24 anos</option>
+                            <option>25 a 34 anos</option>
+                            <option>35 a 44 anos</option>
+                            <option>45 a 54 anos</option>
+                            <option>55 a 64 anos</option>
+                            <option>65 anos ou mais</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="localidade" class="block font-medium mb-2 text-brand-purple">Cidade e estado</label>
+                        <input type="text" id="localidade" name="localidade" placeholder="Ex.: Manaus, AM" class="campo">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="genero" class="block font-medium mb-2 text-brand-purple">Como você se identifica</label>
+                        <select id="genero" name="genero" class="campo">
+                            <option value="">Selecione...</option>
+                            <option>Mulher Cis</option>
+                            <option>Mulher Trans</option>
+                            <option>Não-binária</option>
+                            <option>Prefiro não informar</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="estado_civil" class="block font-medium mb-2 text-brand-purple">Estado civil</label>
+                        <select id="estado_civil" name="estado_civil" class="campo">
+                            <option value="">Selecione...</option>
+                            <option>Solteira</option>
+                            <option>Casada</option>
+                            <option>União estável</option>
+                            <option>Divorciada</option>
+                            <option>Viúva</option>
+                            <option>Prefiro não informar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="objetivo_site" class="block font-medium mb-2 text-brand-purple">O que você busca aqui?</label>
+                    <textarea id="objetivo_site" name="objetivo_site" rows="3"
+                        placeholder="Ex.: encontrar apoio emocional, trocar experiências, conhecer outras mulheres..."
+                        class="campo resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label for="sonhos_objetivos_vida" class="block font-medium mb-2 text-brand-purple">Seus sonhos e objetivos de vida</label>
+                    <textarea id="sonhos_objetivos_vida" name="sonhos_objetivos_vida" rows="3"
+                        placeholder="Conte um pouco sobre o que você sonha realizar..."
+                        class="campo resize-none"></textarea>
+                </div>
+
+                <!-- Mensagens de retorno -->
+                <div id="mensagem" class="hidden p-4 rounded-xl text-center font-medium"></div>
+
+                <button type="submit" id="btnEnviar"
+                    class="w-full bg-brand-purple text-white text-lg px-8 py-4 rounded-full font-medium btn-primary hover:bg-[#4a2846] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-heart text-sm"></i>
+                    <span id="btnTexto">Quero fazer parte</span>
+                </button>
+
+                <p class="text-center text-sm text-brand-text/60 font-light">
+                    Seus dados são usados apenas para a comunidade e nunca serão compartilhados.
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-brand-silver/30 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-spa text-xl silver-gradient"></i>
+                <span class="font-serif font-bold text-brand-purple">De Aços e de Flores</span>
+            </div>
+
+            <div class="flex space-x-6">
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-brand-silver text-sm font-light">
+            &copy; 2024 De Aços e de Flores. Todos os direitos reservados.<br>
+            Um espaço feito por mulheres, para mulheres.
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQlnxXvxmHiHxC2Qwc4ATG0W1cli3y-pBBMTiyJ9JNVNUiM5gNHm1w43PccGzKCzYo/exec';
+
+        const form = document.getElementById('formCadastro');
+        const btnEnviar = document.getElementById('btnEnviar');
+        const btnTexto = document.getElementById('btnTexto');
+        const mensagem = document.getElementById('mensagem');
+
+        function mostrarMensagem(texto, sucesso) {
+            mensagem.textContent = texto;
+            mensagem.className = 'p-4 rounded-xl text-center font-medium ' +
+                (sucesso
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-red-50 text-red-700 border border-red-200');
+        }
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            btnEnviar.disabled = true;
+            btnTexto.textContent = 'Enviando...';
+            mensagem.className = 'hidden';
+
+            const payload = {
+                nome: document.getElementById('nome').value.trim(),
+                login_contato: document.getElementById('login_contato').value.trim(),
+                faixa_etaria: document.getElementById('faixa_etaria').value,
+                localidade: document.getElementById('localidade').value.trim(),
+                genero: document.getElementById('genero').value,
+                estado_civil: document.getElementById('estado_civil').value,
+                objetivo_site: document.getElementById('objetivo_site').value.trim(),
+                sonhos_objetivos_vida: document.getElementById('sonhos_objetivos_vida').value.trim()
+            };
+
+            try {
+                // Envio como text/plain para evitar bloqueio de CORS do Apps Script
+                const resposta = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'cadastrarParticipante', payload: payload })
+                });
+
+                const resultado = await resposta.json();
+
+                if (resultado.status === 'success') {
+                    mostrarMensagem('🌷 Cadastro realizado com sucesso! Seja muito bem-vinda à comunidade.', true);
+                    form.reset();
+                } else {
+                    mostrarMensagem('Ops, algo deu errado: ' + (resultado.message || 'tente novamente.'), false);
+                }
+            } catch (erro) {
+                mostrarMensagem('Não foi possível enviar agora. Verifique sua internet e tente novamente.', false);
+            }
+
+            btnEnviar.disabled = false;
+            btnTexto.textContent = 'Quero fazer parte';
+        });
+    </script>
+
+</body>
+</html>
