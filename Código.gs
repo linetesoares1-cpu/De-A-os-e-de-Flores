@@ -134,12 +134,18 @@ function salvarConteudo(ss, payload) {
     if (linha === -1) {
       return { status: 'error', message: 'Conteúdo com id ' + payload.id + ' não encontrado.' };
     }
+    // Se o payload não trouxer "ativo" explicitamente (ex.: o formulário de edição
+    // não envia esse campo), mantém o valor que já estava salvo — senão, editar um
+    // conteúdo oculto o publicava de novo sem querer.
+    let ativoAtual = aba.getRange(linha, 6).getValue();
+    let ativoAtualBool = ativoAtual === true || ativoAtual === 'VERDADEIRO' || ativoAtual === 'true';
+    let novoAtivo = (typeof payload.ativo === 'boolean') ? payload.ativo : ativoAtualBool;
     aba.getRange(linha, 2, 1, 5).setValues([[
       payload.tipo_conteudo || '',
       payload.texto_conteudo || '',
       payload.autor || '',
       payload.video_url || '',
-      payload.ativo === false ? false : true
+      novoAtivo
     ]]);
     return { status: 'success', message: 'Conteúdo atualizado com sucesso!', id: payload.id };
   }
@@ -218,11 +224,19 @@ function getDadosAba(ss, nomeAba, incluirInativos) {
       let cabecalho = headers[j];
       let valor = row[j];
 
-      if (valor instanceof Date) {
+      // Checagem robusta de data: "instanceof Date" pode falhar dependendo de como
+      // o valor chega do Sheets, então detectamos por "tem getFullYear() e é uma data válida".
+      let ehData = valor && typeof valor.getFullYear === 'function' && !isNaN(valor.getTime && valor.getTime());
+      if (ehData) {
         let dia = String(valor.getDate()).padStart(2, '0');
         let mes = String(valor.getMonth() + 1).padStart(2, '0');
         let ano = valor.getFullYear();
-        valor = `${dia}/${mes}/${ano}`;
+        let horas = valor.getHours();
+        let minutos = valor.getMinutes();
+        // Se tiver hora diferente de 00:00, mantém junto (ex.: data_cadastro grava data+hora)
+        valor = (horas === 0 && minutos === 0)
+          ? `${dia}/${mes}/${ano}`
+          : `${dia}/${mes}/${ano} ${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}`;
       }
 
       if (cabecalho !== 'ativo' && valor !== '' && valor !== null && valor !== false) {
