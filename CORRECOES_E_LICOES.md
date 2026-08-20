@@ -87,3 +87,31 @@ Registro didático dos problemas encontrados no projeto e como foram resolvidos.
 ---
 
 *Vistoria realizada em 20/08/2026. Testes feitos direto na URL pública do backend (cadastro, edição de conteúdo, ocultar/publicar, desativar/reativar participante) — todos os dados de teste foram removidos da planilha ao final.*
+
+---
+
+## 7. Mural privado (login Google) — cuidado ao abrir "Ocultar/Publicar" para uma aba nova
+
+**Contexto:** ao construir o mural de recados (comunidade.html + aba `Mural` na planilha), a função `alternarAtivo` (que oculta/publica um registro) já existia para as abas Conteúdos e Participantes. Ela decidia qual aba usar assim: "se o pedido disser `Participantes`, usa Participantes; senão, usa Conteúdos" — ou seja, **qualquer valor que não fosse exatamente "Participantes" caía em "Conteúdos"**.
+
+**Por que isso importava para o mural:** ao simplesmente adicionar `'Mural'` como mais uma opção do jeito antigo, um erro de digitação no nome da aba (ou uma tentativa mal-intencionada de mandar `aba: "Outra coisa"`) continuaria caindo silenciosamente em "Conteúdos" — o oposto do que a pessoa pediu, sem nenhum aviso de erro.
+
+**Correção:** troquei a lógica por uma **lista branca explícita** (`['Conteúdos', 'Participantes', 'Mural']`) — só essas três abas podem ser alternadas, e qualquer outro valor cai no mesmo padrão seguro de antes (Conteúdos), mas agora por uma regra clara e fácil de auditar, não por "eliminação". (`Código.gs`, função `alternarAtivo`.)
+
+**Como evitar no futuro:** sempre que uma função aceitar "o nome de uma aba" ou "uma ação" vindo de fora (do navegador), use uma lista de valores permitidos (whitelist) em vez de uma lógica de "se não for X, deve ser Y" — assim, valores inesperados nunca acionam a opção errada por acidente.
+
+---
+
+## 8. Mural privado — por que a conferência do login tinha que ser feita no servidor, não só na tela
+
+**O que se decidiu evitar:** seria mais simples (e mais rápido de programar) confiar no que o próprio navegador diz — por exemplo, o site guardar "estou logada" numa variável e mandar o nome/e-mail digitados por quem está usando o site.
+
+**Por que isso seria perigoso:** qualquer pessoa com um pouco de conhecimento técnico consegue abrir o "console" do navegador e mandar uma chamada direta para o backend, forjando "sou a Fulana, meu e-mail é X" sem nunca ter feito login de verdade. O mural ficaria com mensagens assinadas por pessoas que nunca escreveram nada.
+
+**Como foi implementado certo:** o site manda só o "crachá" (token) que o próprio Google emitiu depois do login de verdade. O backend (`Código.gs`, função `validarTokenGoogle`) manda esse crachá de volta para o Google conferir (`tokeninfo`) a cada chamada, e só confia no nome/e-mail que **o Google devolve**, nunca no que o formulário manda. Ninguém consegue fabricar um crachá válido sem ter feito login de verdade com aquela conta.
+
+**Como evitar no futuro:** toda vez que um sistema precisar saber "quem é essa pessoa" para gravar algo (autoria, permissão), a conferência de identidade tem que acontecer no servidor a cada chamada — nunca confiar em um campo que o próprio navegador da pessoa está mandando.
+
+---
+
+*Seção do mural adicionada em 20/08/2026, junto com a implementação do login Google — ver `docs/2026-08-20-mural-login-google.md` para a especificação completa aprovada.*

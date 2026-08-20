@@ -7,7 +7,8 @@ Manual simples para quem vai usar o site, sem precisar entender de programação
 1. Acesse: https://linetesoares1-cpu.github.io/De-A-os-e-de-Flores/
 2. A página inicial apresenta a comunidade. O botão **"Fazer parte da comunidade"** (ou "Cadastre-se") leva ao formulário de cadastro.
 3. Em **cadastro.html**, preencha os campos e clique em enviar. Uma mensagem confirma "Cadastro realizado com sucesso!" — nesse momento os dados já foram gravados na planilha da equipe.
-4. Seções como "Mural da Comunidade", "Círculos de Conversa" e "Reflexões de Aço" ainda estão em construção (os botões existem, mas ainda não têm página própria).
+4. Em **comunidade.html**, além da galeria de participantes, agora existe o **mural privado**: um botão "Entrar com o Google" abre a mensagem de quem já está logada com nome, data e mensagem, e um campo para escrever a sua. **Enquanto o Client ID do Google não estiver configurado (ver pendências), o botão mostra "Login em configuração — em breve!" em vez do botão de verdade.**
+5. Seções como "Círculos de Conversa" e "Reflexões de Aço" ainda estão em construção (os botões existem, mas ainda não têm página própria).
 
 ## Para a equipe (gerenciar conteúdo e participantes)
 
@@ -22,6 +23,10 @@ Veja o manual dedicado: [`MANUAL-DE-GERENCIAMENTO.md`](MANUAL-DE-GERENCIAMENTO.m
 | Painel da equipe | https://linetesoares1-cpu.github.io/De-A-os-e-de-Flores/gerenciar.html |
 | Planilha (banco de dados) | https://docs.google.com/spreadsheets/d/1V2njaZXlwX3EAhmYReHrmk3I90XeL1OPSXS7oPlZY7U/edit |
 | Código do site (GitHub) | https://github.com/linetesoares1-cpu/De-A-os-e-de-Flores |
+
+## Pendência atual: login com Google
+
+O mural privado (comunidade.html) já está pronto e testado por dentro, mas falta uma peça que só o Luciano pode criar: o **Client ID do Google**, uma credencial gratuita do Google Cloud Console. Enquanto isso não for feito, o botão de login mostra um aviso de "em configuração" em vez de funcionar. Assim que o Client ID existir, é só colar em dois lugares (arquivo `comunidade.html` e nas configurações do backend) para o login passar a funcionar de verdade.
 
 ## Se algo parecer quebrado
 

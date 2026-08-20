@@ -7,6 +7,45 @@ function getChaveAdmin() {
   return PropertiesService.getScriptProperties().getProperty('CHAVE_ADMIN') || 'acoseflores2026';
 }
 
+// Client ID do Google (Login com Google) — configurado em Propriedades do script.
+// Sem essa propriedade, o mural fica desligado (login e ações retornam erro claro).
+function getGoogleClientId() {
+  return PropertiesService.getScriptProperties().getProperty('GOOGLE_CLIENT_ID') || '';
+}
+
+// Confere o "crachá" (ID token) que o Google Identity Services devolve no navegador.
+// Consulta o próprio Google (tokeninfo) para validar assinatura/expiração e confirma
+// que o token foi emitido para o nosso Client ID (campo "aud").
+function validarTokenGoogle(idToken) {
+  if (!idToken) {
+    return { valido: false, erro: 'Faça login para ver o mural.' };
+  }
+  const clientId = getGoogleClientId();
+  if (!clientId) {
+    return { valido: false, erro: 'Login com Google ainda não está configurado.' };
+  }
+  try {
+    const resposta = UrlFetchApp.fetch(
+      'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(idToken),
+      { muteHttpExceptions: true }
+    );
+    if (resposta.getResponseCode() !== 200) {
+      return { valido: false, erro: 'Faça login para ver o mural.' };
+    }
+    const info = JSON.parse(resposta.getContentText());
+    if (info.aud !== clientId) {
+      return { valido: false, erro: 'Faça login para ver o mural.' };
+    }
+    return {
+      valido: true,
+      email: info.email || '',
+      nome: info.name || info.email || 'Uma flor da comunidade'
+    };
+  } catch (erro) {
+    return { valido: false, erro: 'Faça login para ver o mural.' };
+  }
+}
+
 function doGet(e) {
   let action = e && e.parameter ? e.parameter.action : 'getAll';
   let result = {};
@@ -44,8 +83,16 @@ function doPost(e) {
       return responderJson(salvarParticipante(dados.payload));
     }
 
+    // ---- Mural privado (exige crachá do login Google, não a chave da equipe) ----
+    if (dados.action === 'muralListar') {
+      return responderJson(muralListar(dados.id_token));
+    }
+    if (dados.action === 'muralPostar') {
+      return responderJson(muralPostar(dados.id_token, dados.payload));
+    }
+
     // ---- Ações administrativas (exigem a chave de acesso) ----
-    const acoesAdmin = ['adminListarConteudos', 'adminSalvarConteudo', 'adminAlternarAtivo', 'adminListarParticipantes'];
+    const acoesAdmin = ['adminListarConteudos', 'adminSalvarConteudo', 'adminAlternarAtivo', 'adminListarParticipantes', 'adminListarMural'];
     if (acoesAdmin.indexOf(dados.action) !== -1) {
       if (!dados.chave || dados.chave !== getChaveAdmin()) {
         return responderJson({ status: 'error', message: 'Chave de acesso inválida.' });
@@ -58,6 +105,9 @@ function doPost(e) {
       }
       if (dados.action === 'adminListarParticipantes') {
         return responderJson({ status: 'success', data: getDadosAba(ss, 'Participantes', true) });
+      }
+      if (dados.action === 'adminListarMural') {
+        return responderJson({ status: 'success', data: getDadosAba(ss, 'Mural', true) });
       }
       if (dados.action === 'adminSalvarConteudo') {
         return responderJson(salvarConteudo(ss, dados.payload));
@@ -162,9 +212,49 @@ function salvarConteudo(ss, payload) {
   return { status: 'success', message: 'Conteúdo criado com sucesso!', id: novoId };
 }
 
-// Liga/desliga a coluna "ativo" de um registro (Conteúdos ou Participantes)
+// Lista os posts do mural para quem já está logada: só campos públicos.
+// O e-mail da autora NUNCA vai para outras participantes, só para a moderação (com chave).
+function muralListar(idToken) {
+  const v = validarTokenGoogle(idToken);
+  if (!v.valido) {
+    return { status: 'error', message: v.erro };
+  }
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const posts = getDadosAba(ss, 'Mural').map(function (p) {
+    return { id: p.id, data_post: p.data_post, nome: p.nome, texto: p.texto };
+  });
+  posts.sort(function (a, b) { return Number(b.id) - Number(a.id); }); // mais recente primeiro
+  return { status: 'success', data: posts };
+}
+
+// Publica uma mensagem no mural. Nome e e-mail vêm do crachá do Google (não do formulário),
+// então ninguém consegue postar em nome de outra pessoa.
+function muralPostar(idToken, payload) {
+  const v = validarTokenGoogle(idToken);
+  if (!v.valido) {
+    return { status: 'error', message: v.erro };
+  }
+  const texto = (payload && payload.texto ? String(payload.texto) : '').trim();
+  if (!texto) {
+    return { status: 'error', message: 'Escreva algo antes de publicar.' };
+  }
+  if (texto.length > 2000) {
+    return { status: 'error', message: 'O texto pode ter no máximo 2000 caracteres.' };
+  }
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const aba = ss.getSheetByName('Mural');
+  if (!aba) {
+    return { status: 'error', message: 'Aba Mural não encontrada.' };
+  }
+  const novoId = proximoId(aba);
+  aba.appendRow([novoId, new Date(), v.email, v.nome, texto, true]);
+  return { status: 'success', message: 'Publicado com sucesso!', id: novoId };
+}
+
+// Liga/desliga a coluna "ativo" de um registro (Conteúdos, Participantes ou Mural)
 function alternarAtivo(ss, payload) {
-  const nomeAba = payload.aba === 'Participantes' ? 'Participantes' : 'Conteúdos';
+  const abasPermitidas = ['Conteúdos', 'Participantes', 'Mural'];
+  const nomeAba = abasPermitidas.indexOf(payload.aba) !== -1 ? payload.aba : 'Conteúdos';
   const aba = ss.getSheetByName(nomeAba);
   if (!aba) {
     return { status: 'error', message: 'Aba ' + nomeAba + ' não encontrada.' };

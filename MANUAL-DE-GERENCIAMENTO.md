@@ -20,7 +20,7 @@ Este manual explica, em linguagem simples, como cuidar do site da comunidade: pu
 
 1. Abra a página **gerenciar.html** (link na tabela acima).
 2. Digite a **chave de acesso da equipe** e clique em **Entrar**.
-3. Pronto! O painel abre com duas abas: **Conteúdos** e **Participantes**.
+3. Pronto! O painel abre com três abas: **Conteúdos**, **Participantes** e **Mural**.
 4. Ao terminar, clique em **Sair** (canto superior direito do painel).
 
 > ⚠️ A chave é da equipe — não compartilhe com pessoas de fora. Se suspeitar que vazou, troque a chave (veja no final do manual).
@@ -63,12 +63,24 @@ Mostra todas as mulheres cadastradas pelo site, com nome, contato, localidade e 
 
 ---
 
+## 💬 Aba Mural
+
+Mostra todas as mensagens que as mulheres logadas publicaram no mural privado (comunidade.html), incluindo o e-mail de quem postou (que nunca aparece para as outras participantes — só aqui, com chave).
+
+- **Ocultar**: some do mural que as participantes veem, mas continua guardado.
+- **Publicar**: coloca de volta uma mensagem que estava oculta.
+
+> ⚠️ O mural só funciona depois que o **Client ID do Google** for configurado (ver `ESPECIFICACAO.md`, seção "Roadmap"). Até lá, ninguém consegue logar nem postar, então esta aba deve aparecer vazia.
+
+---
+
 ## 📊 A planilha (nosso banco de dados)
 
-A planilha do Google Sheets guarda tudo em duas abas:
+A planilha do Google Sheets guarda tudo em três abas:
 
 - **Participantes** — colunas: id, data_cadastro, login_contato, nome, faixa_etaria, localidade, genero, estado_civil, objetivo_site, sonhos_objetivos_vida, ativo
 - **Conteúdos** — colunas: id, tipo_conteudo, texto_conteudo, autor, video_url, ativo
+- **Mural** — colunas: id, data_post, email, nome, texto, ativo
 
 **Regras de ouro:**
 1. ❌ **Não renomeie** as abas nem os títulos das colunas (linha 1) — o site depende desses nomes exatos.

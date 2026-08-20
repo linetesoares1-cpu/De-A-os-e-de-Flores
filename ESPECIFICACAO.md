@@ -6,15 +6,19 @@ Site da comunidade feminina "De Aços e de Flores", feito no Curso de IA (Turma 
 
 - **`index.html`** — página inicial: apresentação da comunidade, botões para o cadastro, seções "Mural", "Círculos de Conversa" e "Reflexões" (ainda sem página própria — links `#`, ver roadmap).
 - **`cadastro.html`** — formulário público. Qualquer visitante preenche nome, contato, faixa etária, localidade, gênero, estado civil, objetivo no site e sonhos/objetivos de vida. Ao enviar, grava um novo participante na planilha (aba `Participantes`) via `POST` no backend.
-- **`gerenciar.html`** — painel administrativo protegido por chave (não é login de usuário — é uma senha única da equipe). Duas abas:
+- **`comunidade.html`** — galeria pública de participantes (jardim) + **mural privado**: quem faz login com a conta Google vê e publica mensagens; quem não faz login não vê nada do mural (só o convite para entrar). Enquanto o Client ID do Google não estiver configurado, aparece um aviso "Login em configuração".
+- **`gerenciar.html`** — painel administrativo protegido por chave (não é login de usuário — é uma senha única da equipe). Três abas:
   - **Conteúdos**: criar, editar, ocultar/publicar frases, vídeos e mensagens de chatbot (aba `Conteúdos` da planilha).
   - **Participantes**: ver lista completa (com dados sensíveis) e desativar/reativar cadastros.
+  - **Mural**: ver todas as mensagens do mural (inclusive ocultas e com e-mail da autora) e Ocultar/Publicar cada uma.
 - **Backend** (Google Apps Script, arquivo `Código.gs` no repo é cópia-espelho do projeto real): expõe uma URL `/exec` com:
   - `GET ?action=getAll` — participantes públicos + conteúdos ativos.
   - `GET ?action=getParticipantes` — só `id`, `nome`, `localidade` (privacidade).
   - `GET ?action=getConteudos` — conteúdos ativos.
   - `POST {action:'cadastrarParticipante', payload}` — cadastro público, sem chave.
-  - `POST {action:'adminListarConteudos'|'adminListarParticipantes'|'adminSalvarConteudo'|'adminAlternarAtivo', chave, payload}` — ações da equipe, exigem a chave certa.
+  - `POST {action:'muralListar', id_token}` — lista posts ativos do mural (id, data, nome, texto); exige crachá de login Google válido.
+  - `POST {action:'muralPostar', id_token, payload:{texto}}` — publica um post; nome e e-mail vêm do crachá, não do formulário.
+  - `POST {action:'adminListarConteudos'|'adminListarParticipantes'|'adminListarMural'|'adminSalvarConteudo'|'adminAlternarAtivo', chave, payload}` — ações da equipe, exigem a chave certa. `adminAlternarAtivo` aceita `aba: 'Conteúdos'|'Participantes'|'Mural'`.
 
 ## Planilha (banco de dados)
 
@@ -22,18 +26,28 @@ ID `1V2njaZXlwX3EAhmYReHrmk3I90XeL1OPSXS7oPlZY7U`.
 
 - **Participantes**: id, data_cadastro, login_contato, nome, faixa_etaria, localidade, genero, estado_civil, objetivo_site, sonhos_objetivos_vida, ativo.
 - **Conteúdos**: id, tipo_conteudo, texto_conteudo, autor, video_url, ativo.
+- **Mural**: id, data_post, email, nome, texto, ativo. (aba nova, criada em 20/08/2026 para o mural privado; sem checkboxes pré-criados em linhas vazias.)
 
 `ativo` é soft delete: nada é apagado de verdade pelo painel, só fica escondido do site público.
+
+## Mural privado (login com Google)
+
+- Login via Google Identity Services (botão "Entrar com o Google" em `comunidade.html`). O Google devolve um "crachá" digital (ID token JWT) que o site guarda em `sessionStorage` e envia em toda chamada do mural.
+- O backend confere esse crachá em `https://oauth2.googleapis.com/tokeninfo` a cada chamada (não confia só na tela) e extrai e-mail/nome de quem está logada — a pessoa nunca digita nome/e-mail para postar.
+- O crachá expira em ~1h; quando expira, a próxima chamada falha e o site volta a mostrar a tela de login sozinho.
+- O Client ID do Google fica em duas pontas: no HTML (`comunidade.html`, constante `GOOGLE_CLIENT_ID`) e no backend (Propriedade de script `GOOGLE_CLIENT_ID`). **Enquanto o Client ID não for configurado nos dois lugares, o mural fica desligado** — o site mostra "Login em configuração" e o backend recusa `muralListar`/`muralPostar` com mensagem clara.
+- E-mails das autoras nunca aparecem para outras participantes — só na aba Mural do painel de gerenciamento (com chave).
 
 ## Privacidade / LGPD
 
 O backend é público (`ANYONE_ANONYMOUS`, qualquer pessoa com a URL consegue chamar a API). Por isso:
 - O `GET` público de participantes devolve **só** id/nome/localidade — contato e respostas pessoais só aparecem na área de gerenciamento (com chave).
-- Cadastros são fictícios/de aula. Antes de usar com dados reais de pessoas de verdade em produção, o ideal seria adicionar autenticação (ex.: exigir login) antes de expor qualquer dado pessoal.
+- O mural exige login Google válido tanto para ler quanto para postar — verificado no servidor a cada chamada, não só escondido na tela.
+- Cadastros são fictícios/de aula. Antes de usar com dados reais de pessoas de verdade em produção, o ideal seria reforçar ainda mais a autenticação (hoje já há login no mural; o cadastro de participantes continua público, como decidido pela equipe).
 
 ## Roadmap / pendências conhecidas
 
-- Mural da comunidade (link `#` no index).
+- **Client ID do Google ainda não configurado** — o mural está pronto e testado no backend, mas falta o Luciano criar o Client ID no Google Cloud Console e colar em `comunidade.html` (constante `GOOGLE_CLIENT_ID`) e na Propriedade de script `GOOGLE_CLIENT_ID`. Sem isso, o login não pode ser testado de ponta a ponta.
 - Círculos de Conversa (link `#` no index).
 - Página de Reflexões de Aço (link `#` no index).
 - Grade da aba **Conteúdos** na planilha ainda tem ~1000 linhas extras com checkbox pré-criado na coluna `ativo` (igual o que a aba Participantes já teve e foi corrigido). Não quebra nada — o backend já ignora linhas vazias — mas um conteúdo novo criado pelo painel cai lá longe na planilha (linha ~1006) em vez de logo abaixo dos existentes. Correção é só cosmética/organizacional: aparar a grade para o tamanho real dos dados (ver `CORRECOES_E_LICOES.md`).

@@ -106,6 +106,9 @@
                         <button data-aba="participantes" class="botaoAba px-5 py-2 rounded-full font-medium border border-brand-purple text-brand-purple text-sm transition-colors">
                             <i class="fa-solid fa-users mr-1"></i> Participantes
                         </button>
+                        <button data-aba="mural" class="botaoAba px-5 py-2 rounded-full font-medium border border-brand-purple text-brand-purple text-sm transition-colors">
+                            <i class="fa-solid fa-comment-dots mr-1"></i> Mural
+                        </button>
                         <button id="btnSair" class="px-5 py-2 rounded-full font-medium border border-brand-silver/50 text-brand-text/60 hover:text-brand-purple text-sm transition-colors">
                             <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
                         </button>
@@ -215,6 +218,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ABA MURAL -->
+                <div id="abaMural" class="hidden">
+                    <div class="bg-white rounded-2xl border border-brand-silver/20 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-brand-silver/20 flex items-center justify-between">
+                            <h2 class="font-serif text-xl text-brand-purple">Mural — mensagens da comunidade</h2>
+                            <button id="btnRecarregarMural" class="text-brand-purple hover:underline text-sm font-medium">
+                                <i class="fa-solid fa-rotate mr-1"></i> Recarregar
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-brand-light text-brand-purple text-left">
+                                        <th class="px-4 py-3 font-semibold">Nome</th>
+                                        <th class="px-4 py-3 font-semibold">E-mail</th>
+                                        <th class="px-4 py-3 font-semibold">Data</th>
+                                        <th class="px-4 py-3 font-semibold">Mensagem</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Situação</th>
+                                        <th class="px-4 py-3 font-semibold text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaMural">
+                                    <tr><td colspan="6" class="px-4 py-8 text-center text-brand-silver">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     </main>
@@ -268,6 +300,7 @@
                     $('painel').classList.remove('hidden');
                     renderizarConteudos(r.data);
                     carregarParticipantes();
+                    carregarMural();
                 } else {
                     sessionStorage.removeItem('chaveAdmin');
                     $('erroChave').textContent = r.message || 'Chave inválida.';
@@ -296,6 +329,7 @@
                 btn.classList.remove('text-brand-purple');
                 $('abaConteudos').classList.toggle('hidden', btn.dataset.aba !== 'conteudos');
                 $('abaParticipantes').classList.toggle('hidden', btn.dataset.aba !== 'participantes');
+                $('abaMural').classList.toggle('hidden', btn.dataset.aba !== 'mural');
             });
         });
 
@@ -450,6 +484,54 @@
         }
 
         $('btnRecarregarParticipantes').addEventListener('click', carregarParticipantes);
+
+        // ---------- Mural ----------
+        function renderizarMural(lista) {
+            const corpo = $('listaMural');
+            if (!lista || !lista.length) {
+                corpo.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-brand-silver">Nenhuma mensagem ainda.</td></tr>';
+                return;
+            }
+            corpo.innerHTML = lista.map(m => `
+                <tr class="border-t border-brand-silver/10 ${m.ativo ? '' : 'opacity-50'}">
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(m.nome)}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(m.email)}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">${escapar(m.data_post)}</td>
+                    <td class="px-4 py-3 max-w-md">${escapar(m.texto)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${m.ativo ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">
+                            ${m.ativo ? 'No ar' : 'Oculto'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                        <button class="btnAlternarM ${m.ativo ? 'text-gray-500' : 'text-green-600'} hover:underline font-medium" data-id="${m.id}" data-ativo="${m.ativo}">
+                            <i class="fa-solid ${m.ativo ? 'fa-eye-slash' : 'fa-eye'}"></i> ${m.ativo ? 'Ocultar' : 'Publicar'}
+                        </button>
+                    </td>
+                </tr>`).join('');
+
+            corpo.querySelectorAll('.btnAlternarM').forEach(b => b.addEventListener('click', async () => {
+                if (b.disabled) return;
+                b.disabled = true;
+                const novoAtivo = b.dataset.ativo !== 'true';
+                try {
+                    const r = await chamarApi('adminAlternarAtivo', { aba: 'Mural', id: Number(b.dataset.id), ativo: novoAtivo });
+                    aviso(r.message || 'Feito.', r.status === 'success');
+                    carregarMural();
+                } catch (e) {
+                    aviso('Falha de conexão. Tente novamente.', false);
+                    b.disabled = false;
+                }
+            }));
+        }
+
+        async function carregarMural() {
+            const r = await chamarApi('adminListarMural');
+            if (r.status === 'success') renderizarMural(r.data);
+            else aviso(r.message || 'Erro ao carregar o mural.', false);
+        }
+
+        $('btnRecarregarMural').addEventListener('click', carregarMural);
 
         // ---------- Sair ----------
         $('btnSair').addEventListener('click', () => {
