@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Comunidade | De Aços e de Flores</title>
+
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256',
+                            light: '#F8F4F9',
+                            silver: '#B0B5B9',
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F4F9;
+            color: #333333;
+        }
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3);
+        }
+        .card-hover:hover {
+            border-color: #5B3256;
+            box-shadow: 0 10px 30px rgba(91, 50, 86, 0.05);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Cabeçalho (Navbar) -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <i class="fa-solid fa-spa text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </a>
+
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Início</a>
+                    <a href="comunidade.html" class="text-brand-purple font-semibold transition-colors">A Comunidade</a>
+                    <a href="circulos.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Círculos de Conversa</a>
+                    <a href="reflexoes.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Reflexões de Aço</a>
+                </nav>
+
+                <div class="hidden md:flex">
+                    <a href="cadastro.html" class="bg-brand-purple text-white px-6 py-2.5 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                        Entrar na Comunidade
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <a href="index.html" class="text-brand-purple text-2xl"><i class="fa-solid fa-arrow-left"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cabeçalho da página -->
+    <section class="relative py-16 lg:py-20 overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-purple opacity-5 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-silver opacity-10 blur-3xl"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+            <i class="fa-solid fa-users text-4xl text-brand-purple opacity-70 mb-4"></i>
+            <h1 class="font-serif text-3xl md:text-5xl text-brand-purple leading-tight mb-6">A Comunidade</h1>
+            <p class="max-w-2xl mx-auto text-lg text-brand-text/80 font-light leading-relaxed">
+                Aqui florescem histórias de mulheres reais, que decidiram caminhar juntas. Cada nome abaixo é uma flor que já plantou raiz nesse jardim — e a próxima pode ser a sua.
+            </p>
+            <div class="w-24 h-1 bg-brand-silver mx-auto rounded mt-6"></div>
+        </div>
+    </section>
+
+    <!-- Conteúdo principal -->
+    <main class="flex-grow pb-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+            <!-- Estado de carregamento -->
+            <div id="carregando" class="text-center py-16">
+                <i class="fa-solid fa-spinner spinner text-4xl text-brand-purple"></i>
+                <p class="mt-4 text-brand-text/70 font-light">Reunindo as mulheres da nossa comunidade...</p>
+            </div>
+
+            <!-- Estado de erro -->
+            <div id="erro" class="hidden text-center py-16 bg-white rounded-2xl border border-brand-silver/20">
+                <i class="fa-solid fa-heart-crack text-4xl text-brand-silver mb-4"></i>
+                <p class="text-brand-text/80 font-light max-w-md mx-auto">
+                    Não conseguimos carregar a comunidade agora. Verifique sua internet e tente novamente em instantes. 🌷
+                </p>
+            </div>
+
+            <!-- Sem participantes -->
+            <div id="vazio" class="hidden text-center py-16 bg-white rounded-2xl border border-brand-silver/20">
+                <i class="fa-solid fa-seedling text-4xl text-brand-silver mb-4"></i>
+                <p class="text-brand-text/80 font-light">O jardim ainda está sendo plantado. Seja uma das primeiras flores!</p>
+            </div>
+
+            <!-- Jardim de participantes -->
+            <div id="jardim" class="hidden grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"></div>
+
+            <!-- Aviso mural em breve + CTA -->
+            <div id="avisoMural" class="hidden bg-white p-8 md:p-10 rounded-2xl border border-brand-silver/20 text-center">
+                <i class="fa-solid fa-comment-dots text-3xl text-brand-silver mb-4"></i>
+                <h2 class="font-serif text-xl text-brand-purple mb-3">O mural de recados está a caminho</h2>
+                <p class="text-brand-text/80 font-light leading-relaxed max-w-2xl mx-auto mb-6">
+                    Em breve você poderá deixar mensagens de apoio, celebrar conquistas e trocar experiências diretamente aqui. Por enquanto, venha conhecer quem já faz parte dessa rede e cadastre-se para não perder as novidades.
+                </p>
+                <a href="cadastro.html" class="inline-flex items-center gap-2 bg-brand-purple text-white text-lg px-8 py-4 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                    <i class="fa-solid fa-heart text-sm"></i> Quero fazer parte também
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-brand-silver/30 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-spa text-xl silver-gradient"></i>
+                <span class="font-serif font-bold text-brand-purple">De Aços e de Flores</span>
+            </div>
+
+            <div class="flex space-x-6">
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-brand-silver text-sm font-light">
+            &copy; 2024 De Aços e de Flores. Todos os direitos reservados.<br>
+            Um espaço feito por mulheres, para mulheres.
+            &nbsp;·&nbsp;<a href="gerenciar.html" class="hover:text-brand-purple transition-colors"><i class="fa-solid fa-lock mr-1"></i>Área da equipe</a>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQlnxXvxmHiHxC2Qwc4ATG0W1cli3y-pBBMTiyJ9JNVNUiM5gNHm1w43PccGzKCzYo/exec';
+
+        const iconesFlor = ['fa-spa', 'fa-leaf', 'fa-seedling'];
+
+        function escapar(t) {
+            const div = document.createElement('div');
+            div.textContent = t == null ? '' : t;
+            return div.innerHTML;
+        }
+
+        function cardParticipante(item, indice) {
+            const icone = iconesFlor[indice % iconesFlor.length];
+            const local = item.localidade && item.localidade.trim()
+                ? `<p class="text-brand-text/60 text-sm font-light"><i class="fa-solid fa-location-dot mr-1"></i>${escapar(item.localidade)}</p>`
+                : `<p class="text-brand-text/40 text-sm font-light">&nbsp;</p>`;
+            return `
+                <div class="bg-white p-6 rounded-2xl border border-brand-silver/20 card-hover text-center">
+                    <div class="w-14 h-14 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid ${icone} text-xl silver-gradient"></i>
+                    </div>
+                    <h3 class="font-serif font-semibold text-brand-purple mb-1">${escapar(item.nome) || 'Uma flor da comunidade'}</h3>
+                    ${local}
+                </div>`;
+        }
+
+        async function carregar() {
+            try {
+                const resposta = await fetch(API_URL + '?action=getParticipantes');
+                const resultado = await resposta.json();
+
+                document.getElementById('carregando').classList.add('hidden');
+
+                if (resultado.status !== 'success') {
+                    document.getElementById('erro').classList.remove('hidden');
+                    return;
+                }
+
+                const dados = resultado.data || [];
+
+                if (dados.length === 0) {
+                    document.getElementById('vazio').classList.remove('hidden');
+                    document.getElementById('avisoMural').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('jardim').innerHTML = dados.map(cardParticipante).join('');
+                document.getElementById('jardim').classList.remove('hidden');
+                document.getElementById('avisoMural').classList.remove('hidden');
+            } catch (erro) {
+                document.getElementById('carregando').classList.add('hidden');
+                document.getElementById('erro').classList.remove('hidden');
+            }
+        }
+
+        carregar();
+    </script>
+
+</body>
+</html>

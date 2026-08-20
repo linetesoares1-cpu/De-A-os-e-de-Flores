@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflexões de Aço | De Aços e de Flores</title>
+
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fontes do Google: Cinzel (Elegância/Força) e Montserrat (Leveza/Leitura) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#5B3256',
+                            light: '#F8F4F9',
+                            silver: '#B0B5B9',
+                            text: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F4F9;
+            color: #333333;
+        }
+        .silver-gradient {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a8a8a8 50%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 50, 86, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 50, 86, 0.3);
+        }
+        .card-hover:hover {
+            border-color: #5B3256;
+            box-shadow: 0 10px 30px rgba(91, 50, 86, 0.05);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Cabeçalho (Navbar) -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-brand-silver/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <i class="fa-solid fa-spa text-3xl silver-gradient"></i>
+                    <span class="font-serif font-semibold text-2xl text-brand-purple tracking-wide">De Aços e de Flores</span>
+                </a>
+
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Início</a>
+                    <a href="comunidade.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">A Comunidade</a>
+                    <a href="circulos.html" class="text-brand-text hover:text-brand-purple font-medium transition-colors">Círculos de Conversa</a>
+                    <a href="reflexoes.html" class="text-brand-purple font-semibold transition-colors">Reflexões de Aço</a>
+                </nav>
+
+                <div class="hidden md:flex">
+                    <a href="cadastro.html" class="bg-brand-purple text-white px-6 py-2.5 rounded-full font-medium btn-primary hover:bg-[#4a2846]">
+                        Entrar na Comunidade
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <a href="index.html" class="text-brand-purple text-2xl"><i class="fa-solid fa-arrow-left"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cabeçalho da página -->
+    <section class="relative py-16 lg:py-20 overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-purple opacity-5 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-silver opacity-10 blur-3xl"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+            <i class="fa-solid fa-leaf text-4xl text-brand-purple opacity-70 mb-4"></i>
+            <h1 class="font-serif text-3xl md:text-5xl text-brand-purple leading-tight mb-6">Reflexões de Aço</h1>
+            <p class="max-w-2xl mx-auto text-lg text-brand-text/80 font-light leading-relaxed">
+                Palavras que fortalecem, vídeos que inspiram. Um cantinho para nutrir sua coragem e reconstruir seu amor-próprio, dia após dia.
+            </p>
+            <div class="w-24 h-1 bg-brand-silver mx-auto rounded mt-6"></div>
+        </div>
+    </section>
+
+    <!-- Conteúdo principal -->
+    <main class="flex-grow pb-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+            <!-- Estado de carregamento -->
+            <div id="carregando" class="text-center py-16">
+                <i class="fa-solid fa-spinner spinner text-4xl text-brand-purple"></i>
+                <p class="mt-4 text-brand-text/70 font-light">Buscando reflexões para você...</p>
+            </div>
+
+            <!-- Estado de erro -->
+            <div id="erro" class="hidden text-center py-16 bg-white rounded-2xl border border-brand-silver/20">
+                <i class="fa-solid fa-heart-crack text-4xl text-brand-silver mb-4"></i>
+                <p class="text-brand-text/80 font-light max-w-md mx-auto">
+                    Não conseguimos carregar as reflexões agora. Verifique sua internet e tente novamente em instantes. 🌷
+                </p>
+            </div>
+
+            <!-- Sem conteúdo -->
+            <div id="vazio" class="hidden text-center py-16 bg-white rounded-2xl border border-brand-silver/20">
+                <i class="fa-solid fa-seedling text-4xl text-brand-silver mb-4"></i>
+                <p class="text-brand-text/80 font-light">Em breve novas reflexões serão plantadas aqui. Volte logo!</p>
+            </div>
+
+            <!-- Frases -->
+            <div id="secaoFrases" class="hidden mb-16">
+                <h2 class="font-serif text-2xl text-brand-purple mb-8 flex items-center gap-3">
+                    <i class="fa-solid fa-quote-left text-brand-silver"></i> Frases para guardar no coração
+                </h2>
+                <div id="listaFrases" class="grid md:grid-cols-2 gap-8"></div>
+            </div>
+
+            <!-- Vídeos -->
+            <div id="secaoVideos" class="hidden">
+                <h2 class="font-serif text-2xl text-brand-purple mb-8 flex items-center gap-3">
+                    <i class="fa-solid fa-clapperboard text-brand-silver"></i> Vídeos que inspiram
+                </h2>
+                <div id="listaVideos" class="grid md:grid-cols-2 gap-8"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-brand-silver/30 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-2 mb-4 md:mb-0">
+                <i class="fa-solid fa-spa text-xl silver-gradient"></i>
+                <span class="font-serif font-bold text-brand-purple">De Aços e de Flores</span>
+            </div>
+
+            <div class="flex space-x-6">
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="text-brand-silver hover:text-brand-purple text-2xl transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-brand-silver text-sm font-light">
+            &copy; 2024 De Aços e de Flores. Todos os direitos reservados.<br>
+            Um espaço feito por mulheres, para mulheres.
+            &nbsp;·&nbsp;<a href="gerenciar.html" class="hover:text-brand-purple transition-colors"><i class="fa-solid fa-lock mr-1"></i>Área da equipe</a>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyQlnxXvxmHiHxC2Qwc4ATG0W1cli3y-pBBMTiyJ9JNVNUiM5gNHm1w43PccGzKCzYo/exec';
+
+        function escapar(t) {
+            const div = document.createElement('div');
+            div.textContent = t == null ? '' : t;
+            return div.innerHTML;
+        }
+
+        function cardFrase(item) {
+            return `
+                <div class="bg-white p-8 rounded-2xl border border-brand-silver/20 card-hover relative">
+                    <i class="fa-solid fa-quote-left text-2xl text-brand-silver/50 mb-4"></i>
+                    <p class="font-serif text-lg text-brand-purple leading-relaxed mb-4">${escapar(item.texto_conteudo)}</p>
+                    <p class="text-brand-text/60 text-sm font-medium uppercase tracking-wider">— ${escapar(item.autor) || 'Anônima'}</p>
+                </div>`;
+        }
+
+        function cardVideo(item) {
+            const link = item.video_url ? escapar(item.video_url) : '';
+            const botao = link
+                ? `<a href="${link}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-brand-purple font-medium hover:underline text-sm uppercase tracking-wider">
+                        <i class="fa-solid fa-circle-play"></i> Assistir
+                   </a>`
+                : `<span class="text-brand-text/50 text-sm font-light">Link do vídeo em breve</span>`;
+            return `
+                <div class="bg-white p-8 rounded-2xl border border-brand-silver/20 card-hover">
+                    <div class="w-14 h-14 bg-brand-light rounded-full flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-clapperboard text-xl text-brand-purple"></i>
+                    </div>
+                    <p class="text-brand-text/90 leading-relaxed mb-2">${escapar(item.texto_conteudo)}</p>
+                    <p class="text-brand-text/60 text-sm mb-4">${escapar(item.autor) || 'Equipe De Aços e de Flores'}</p>
+                    ${botao}
+                </div>`;
+        }
+
+        async function carregar() {
+            try {
+                const resposta = await fetch(API_URL + '?action=getConteudos');
+                const resultado = await resposta.json();
+
+                document.getElementById('carregando').classList.add('hidden');
+
+                if (resultado.status !== 'success') {
+                    document.getElementById('erro').classList.remove('hidden');
+                    return;
+                }
+
+                const dados = (resultado.data || []).filter(item => item.ativo !== false);
+                const frases = dados.filter(item => item.tipo_conteudo === 'Frase');
+                const videos = dados.filter(item => item.tipo_conteudo === 'Video');
+
+                if (frases.length === 0 && videos.length === 0) {
+                    document.getElementById('vazio').classList.remove('hidden');
+                    return;
+                }
+
+                if (frases.length > 0) {
+                    document.getElementById('listaFrases').innerHTML = frases.map(cardFrase).join('');
+                    document.getElementById('secaoFrases').classList.remove('hidden');
+                }
+
+                if (videos.length > 0) {
+                    document.getElementById('listaVideos').innerHTML = videos.map(cardVideo).join('');
+                    document.getElementById('secaoVideos').classList.remove('hidden');
+                }
+            } catch (erro) {
+                document.getElementById('carregando').classList.add('hidden');
+                document.getElementById('erro').classList.remove('hidden');
+            }
+        }
+
+        carregar();
+    </script>
+
+</body>
+</html>
